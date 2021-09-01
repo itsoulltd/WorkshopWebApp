@@ -12,9 +12,9 @@ import com.vaadin.flow.data.converter.Converter;
 
 import java.util.Arrays;
 
-public class PassengerEditor extends EmbeddedBeanEditor {
+public class RiderEditor extends EmbeddedBeanEditor {
 
-    public PassengerEditor(Class beanType) {
+    public RiderEditor(Class beanType) {
         super(beanType);
     }
 

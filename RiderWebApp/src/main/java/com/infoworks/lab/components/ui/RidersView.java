@@ -7,15 +7,13 @@ import com.infoworks.lab.components.crud.components.datasource.GridDataSource;
 import com.infoworks.lab.components.crud.components.utils.EditorDisplayType;
 import com.infoworks.lab.components.db.source.JsqlDataSource;
 import com.infoworks.lab.components.db.source.SqlDataSource;
-import com.infoworks.lab.components.presenters.PassengerEditor;
+import com.infoworks.lab.components.presenters.RiderEditor;
 import com.infoworks.lab.components.rest.RestExecutor;
 import com.infoworks.lab.components.rest.source.RestDataSource;
-import com.infoworks.lab.config.DatabaseBootstrap;
 import com.infoworks.lab.domain.entities.Gender;
-import com.infoworks.lab.domain.entities.Passenger;
+import com.infoworks.lab.domain.entities.Rider;
 import com.infoworks.lab.jsql.DataSourceKey;
 import com.infoworks.lab.jsql.ExecutorType;
-import com.infoworks.lab.jsql.JsqlConfig;
 import com.infoworks.lab.layouts.RootAppLayout;
 import com.infoworks.lab.layouts.RoutePath;
 import com.vaadin.flow.component.AttachEvent;
@@ -26,10 +24,10 @@ import com.vaadin.flow.router.Route;
 import java.util.ArrayList;
 import java.util.List;
 
-@Route(value = RoutePath.PASSENGERS_CRUD_VIEW, layout = RootAppLayout.class)
-public class PassengersView extends Composite<Div> {
+@Route(value = RoutePath.RIDERS_CRUD_VIEW, layout = RootAppLayout.class)
+public class RidersView extends Composite<Div> {
 
-    public PassengersView() {
+    public RidersView() {
         super();
     }
 
@@ -44,11 +42,11 @@ public class PassengersView extends Composite<Div> {
         //Create DataSource:
         GridDataSource source = createDataSource(ExecutorType.SQL);
 
-        Configurator configurator = new Configurator(Passenger.class)
+        Configurator configurator = new Configurator(Rider.class)
                 .setDisplayType(EditorDisplayType.EMBEDDED)
                 .setDataSource(source)
-                .setEditor(PassengerEditor.class)
-                .setDialog(PassengerEditor.class)
+                .setEditor(RiderEditor.class)
+                .setDialog(RiderEditor.class)
                 .setGridPageSize(8);
 
         Crud crud = new Crud(configurator);
@@ -66,22 +64,22 @@ public class PassengersView extends Composite<Div> {
             GridDataSource source = JsqlDataSource.createDataSource(RestDataSource.class, executorType);
             //Testing RestExecutor:
             DataSourceKey sourceKey = DataSourceKey.createDataSourceKey("app.db");
-            ((RestDataSource) source).setExecutor(new RestExecutor(Passenger.class, sourceKey));
+            ((RestDataSource) source).setExecutor(new RestExecutor(Rider.class, sourceKey));
             return source;
         }else{
             //In-Memory DataSource:
             GridDataSource source = new DefaultDataSource();
-            getPassengers().stream().forEach(passenger -> source.save(passenger));
+            getRiders().stream().forEach(rider -> source.save(rider));
             return source;
         }
     }
 
-    private List<Passenger> getPassengers() {
-        List<Passenger> personList = new ArrayList<>();
-        personList.add(new Passenger("Lucas", Gender.MALE, 68));
-        personList.add(new Passenger("Peter", Gender.MALE, 38));
-        personList.add(new Passenger("Jack", Gender.MALE, 28));
-        personList.add(new Passenger("Samuel", Gender.MALE, 53));
+    private List<Rider> getRiders() {
+        List<Rider> personList = new ArrayList<>();
+        personList.add(new Rider("Lucas", Gender.MALE, 68));
+        personList.add(new Rider("Peter", Gender.MALE, 38));
+        personList.add(new Rider("Jack", Gender.MALE, 28));
+        personList.add(new Rider("Samuel", Gender.MALE, 53));
         return personList;
     }
 }

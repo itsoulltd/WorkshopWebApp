@@ -1,7 +1,7 @@
 package com.infoworks.lab.layouts;
 
 import com.infoworks.lab.components.component.VImage;
-import com.infoworks.lab.components.ui.PassengersView;
+import com.infoworks.lab.components.ui.RidersView;
 import com.infoworks.lab.components.ui.ProfileView;
 import com.infoworks.lab.components.ui.TrendsView;
 import com.vaadin.flow.component.Component;
@@ -39,7 +39,7 @@ public class RootAppLayout extends AppLayout {
         logo.setHeight("44px");
         addToNavbar(new DrawerToggle(), logo);
 
-        final Tabs tabs = new Tabs(profile(), passengers(), trends(), logout());
+        final Tabs tabs = new Tabs(profile(), riders(), trends(), logout());
         tabs.setOrientation(Tabs.Orientation.VERTICAL);
         tabs.addSelectedChangeListener(event -> {
             final Tab selectedTab = event.getSelectedTab();
@@ -68,9 +68,9 @@ public class RootAppLayout extends AppLayout {
         return tab;
     }
 
-    private Tab passengers() {
-        final Tab  tab   = new Tab("Passengers");
-        tab2Workspace.put(tab, new PassengersView());
+    private Tab riders() {
+        final Tab  tab   = new Tab("Riders");
+        tab2Workspace.put(tab, new RidersView());
         return tab;
     }
 

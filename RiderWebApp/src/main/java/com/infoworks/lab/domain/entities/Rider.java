@@ -14,9 +14,9 @@ import java.util.Calendar;
 import java.util.Date;
 import java.util.Objects;
 
-@Entity(name = "Passenger")
-@TableName(value = "Passenger")
-public class Passenger extends com.it.soul.lab.sql.entity.Entity {
+@Entity(name = "Rider")
+@TableName(value = "Rider")
+public class Rider extends com.it.soul.lab.sql.entity.Entity {
 
 	@PrimaryKey(name="id", auto=true)
 	@Id @Column(length = 100)
@@ -42,11 +42,11 @@ public class Passenger extends com.it.soul.lab.sql.entity.Entity {
 	@Ignore
 	private static int _autoIncrement = -1;
 
-	public Passenger() {
+	public Rider() {
 		this.id = ++_autoIncrement;
 	}
 
-	public Passenger(@NotNull(message = "Name must not be null") String name
+	public Rider(@NotNull(message = "Name must not be null") String name
 			, Gender sex
 			, @Min(value = 18, message = "Min Value is 18.") int age) {
 		this();
@@ -111,8 +111,8 @@ public class Passenger extends com.it.soul.lab.sql.entity.Entity {
 	public boolean equals(Object o) {
 		if (this == o) return true;
 		if (o == null || getClass() != o.getClass()) return false;
-		Passenger passenger = (Passenger) o;
-		return Objects.equals(id, passenger.id);
+		Rider rider = (Rider) o;
+		return Objects.equals(id, rider.id);
 	}
 
 	@Override
