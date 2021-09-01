@@ -1,8 +1,8 @@
 package com.infoworks.lab.repositories;
 
 import com.infoworks.lab.domain.entities.Gender;
-import com.infoworks.lab.domain.entities.Passenger;
-import com.infoworks.lab.domain.repositories.PassengerRepository;
+import com.infoworks.lab.domain.entities.Rider;
+import com.infoworks.lab.domain.repositories.RiderRepository;
 import com.infoworks.lab.webapp.config.TestJPAConfig;
 import org.junit.Assert;
 import org.junit.Test;
@@ -23,55 +23,55 @@ import java.util.Objects;
 @SpringBootTest(classes = {TestJPAConfig.class})
 @Transactional
 @TestPropertySource(locations = {"classpath:h2-db.properties"})
-public class PassengerRepositoryTest {
+public class RiderRepositoryTest {
 
     @Autowired
-    PassengerRepository repository;
+    RiderRepository repository;
 
     @Test
-    public void insertPassenger(){
-        Passenger passenger = new Passenger("Sayed The Coder", Gender.MALE, 24);
-        repository.save(passenger);
+    public void insertRider(){
+        Rider rider = new Rider("Sayed The Coder", Gender.MALE, 24);
+        repository.save(rider);
 
-        List<Passenger> list = repository.findByName("Sayed The Coder");
+        List<Rider> list = repository.findByName("Sayed The Coder");
         Assert.assertTrue(Objects.nonNull(list));
 
         if (list != null && list.size() > 0){
-            Passenger passenger2 = list.get(0);
-            Assert.assertTrue(Objects.equals(passenger.getName(), passenger2.getName()));
+            Rider rider2 = list.get(0);
+            Assert.assertTrue(Objects.equals(rider.getName(), rider2.getName()));
         }
     }
 
     @Test
-    public void updatePassenger(){
+    public void updateRider(){
         //TODO
     }
 
     @Test
-    public void deletePassenger(){
+    public void deleteRider(){
         //TODO
     }
 
     @Test
-    public void countPassenger(){
+    public void countRider(){
         //
-        Passenger passenger = new Passenger("Sayed The Coder", Gender.MALE, 24);
-        repository.save(passenger);
+        Rider rider = new Rider("Sayed The Coder", Gender.MALE, 24);
+        repository.save(rider);
 
         long count = repository.count();
         Assert.assertTrue(count == 1);
     }
 
     @Test
-    public void fetchPassenger(){
+    public void fetchRider(){
         //
-        repository.save(new Passenger("Sayed The Coder", Gender.MALE, 24));
-        repository.save(new Passenger("Evan The Pankha Coder", Gender.MALE, 24));
-        repository.save(new Passenger("Razib The Pagla", Gender.MALE, 26));
+        repository.save(new Rider("Sayed The Coder", Gender.MALE, 24));
+        repository.save(new Rider("Evan The Pankha Coder", Gender.MALE, 24));
+        repository.save(new Rider("Razib The Pagla", Gender.MALE, 26));
         //
-        Page<Passenger> paged = repository.findAll(PageRequest.of(0
+        Page<Rider> paged = repository.findAll(PageRequest.of(0
                 , 10
                 , Sort.by(Sort.Order.asc("name"))));
-        paged.get().forEach(passenger -> System.out.println(passenger.getName()));
+        paged.get().forEach(rider -> System.out.println(rider.getName()));
     }
 }

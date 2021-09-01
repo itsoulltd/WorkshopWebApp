@@ -1,8 +1,8 @@
 package com.infoworks.lab.rest;
 
-import com.infoworks.lab.controllers.rest.PassengerController;
+import com.infoworks.lab.controllers.rest.RiderController;
 import com.infoworks.lab.domain.entities.Gender;
-import com.infoworks.lab.domain.entities.Passenger;
+import com.infoworks.lab.domain.entities.Rider;
 import com.infoworks.lab.rest.models.ItemCount;
 import com.infoworks.lab.webapp.WebApplicationTest;
 import com.infoworks.lab.webapp.config.BeanConfig;
@@ -21,9 +21,9 @@ import org.springframework.test.context.junit4.SpringRunner;
 import java.util.List;
 
 @RunWith(SpringRunner.class)
-@SpringBootTest(classes = {WebApplicationTest.class, BeanConfig.class, PassengerController.class})
+@SpringBootTest(classes = {WebApplicationTest.class, BeanConfig.class, RiderController.class})
 @TestPropertySource(locations = {"classpath:h2-db.properties"})
-public class PassengerControllerTest {
+public class RiderControllerTest {
 
     @Value("${app.db.name}")
     private String dbName;
@@ -43,7 +43,7 @@ public class PassengerControllerTest {
     }
 
     @Autowired
-    private PassengerController controller;
+    private RiderController controller;
 
     @Test
     public void initiateTest(){
@@ -53,7 +53,7 @@ public class PassengerControllerTest {
     @Test
     public void count(){
         //
-        controller.insert(new Passenger("Sayed The Coder", Gender.MALE, 24));
+        controller.insert(new Rider("Sayed The Coder", Gender.MALE, 24));
         //
         ItemCount count = controller.getRowCount();
         System.out.println(count.getCount());
@@ -62,13 +62,13 @@ public class PassengerControllerTest {
     @Test
     public void query(){
         //
-        controller.insert(new Passenger("Sayed The Coder", Gender.MALE, 24));
-        controller.insert(new Passenger("Evan The Pankha Coder", Gender.MALE, 24));
-        controller.insert(new Passenger("Razib The Pagla", Gender.MALE, 26));
+        controller.insert(new Rider("Sayed The Coder", Gender.MALE, 24));
+        controller.insert(new Rider("Evan The Pankha Coder", Gender.MALE, 24));
+        controller.insert(new Rider("Razib The Pagla", Gender.MALE, 26));
         //
         int size = Long.valueOf(controller.getRowCount().getCount()).intValue();
-        List<Passenger> items = controller.query(size, 0);
-        items.stream().forEach(passenger -> System.out.println(passenger.getName()));
+        List<Rider> items = controller.query(size, 0);
+        items.stream().forEach(rider -> System.out.println(rider.getName()));
     }
 
 }

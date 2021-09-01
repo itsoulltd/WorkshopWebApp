@@ -1,9 +1,10 @@
 package com.infoworks.lab.controllers.rest;
 
-import com.infoworks.lab.domain.entities.Passenger;
+import com.infoworks.lab.domain.entities.Rider;
 import com.infoworks.lab.rest.models.ItemCount;
 import com.it.soul.lab.data.simple.SimpleDataSource;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.web.bind.annotation.*;
 
 import javax.validation.Valid;
@@ -11,13 +12,13 @@ import java.util.Arrays;
 import java.util.List;
 
 @RestController
-@RequestMapping("/passenger")
-public class PassengerController {
+@RequestMapping("/rider")
+public class RiderController {
 
-    private SimpleDataSource<String, Passenger> dataSource;
+    private SimpleDataSource<String, Rider> dataSource;
 
     @Autowired
-    public PassengerController(SimpleDataSource<String, Passenger> dataSource) {
+    public RiderController(@Qualifier("riderInMemDatasource") SimpleDataSource<String, Rider> dataSource) {
         this.dataSource = dataSource;
     }
 
@@ -29,26 +30,26 @@ public class PassengerController {
     }
 
     @GetMapping
-    public List<Passenger> query(@RequestParam("limit") Integer limit
+    public List<Rider> query(@RequestParam("limit") Integer limit
             , @RequestParam("offset") Integer offset){
         //TODO: Test with RestExecutor
-        List<Passenger> passengers = Arrays.asList(dataSource.readSync(offset, limit));
-        return passengers;
+        List<Rider> riders = Arrays.asList(dataSource.readSync(offset, limit));
+        return riders;
     }
 
     @PostMapping @SuppressWarnings("Duplicates")
-    public ItemCount insert(@Valid @RequestBody Passenger passenger){
+    public ItemCount insert(@Valid @RequestBody Rider rider){
         //TODO: Test with RestExecutor
-        dataSource.put(passenger.getName(), passenger);
+        dataSource.put(rider.getName(), rider);
         ItemCount count = new ItemCount();
         count.setCount(Integer.valueOf(dataSource.size()).longValue());
         return count;
     }
 
     @PutMapping @SuppressWarnings("Duplicates")
-    public ItemCount update(@Valid @RequestBody Passenger passenger){
+    public ItemCount update(@Valid @RequestBody Rider rider){
         //TODO: Test with RestExecutor
-        Passenger old = dataSource.replace(passenger.getName(), passenger);
+        Rider old = dataSource.replace(rider.getName(), rider);
         ItemCount count = new ItemCount();
         if (old != null)
             count.setCount(Integer.valueOf(dataSource.size()).longValue());
@@ -58,7 +59,7 @@ public class PassengerController {
     @DeleteMapping
     public Boolean delete(@RequestParam("name") String name){
         //TODO: Test with RestExecutor
-        Passenger deleted = dataSource.remove(name);
+        Rider deleted = dataSource.remove(name);
         return deleted != null;
     }
 

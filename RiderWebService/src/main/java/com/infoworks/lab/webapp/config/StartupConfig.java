@@ -1,6 +1,6 @@
 package com.infoworks.lab.webapp.config;
 
-import com.infoworks.lab.domain.entities.Passenger;
+import com.infoworks.lab.domain.entities.Rider;
 import com.infoworks.lab.jsql.ExecutorType;
 import com.infoworks.lab.jsql.JsqlConfig;
 import com.it.soul.lab.sql.SQLExecutor;
@@ -35,15 +35,15 @@ public class StartupConfig implements CommandLineRunner {
                 .isLike("Jac");
         SQLSelectQuery query = new SQLQuery.Builder(QueryType.SELECT)
                 .columns()
-                .from(Passenger.class)
+                .from(Rider.class)
                 .where(where)
                 .build();
         //
         try (SQLExecutor executor = (SQLExecutor) jsqlConfig.create(ExecutorType.SQL, dbKey)){
             ResultSet rs = executor.executeSelect(query);
             Table tb = executor.collection(rs);
-            List<Passenger> passengers = tb.inflate(Passenger.class);
-            passengers.forEach(passenger -> System.out.println(passenger.getName()));
+            List<Rider> riders = tb.inflate(Rider.class);
+            riders.forEach(rider -> System.out.println(rider.getName()));
         } catch (SQLException e) {
             e.printStackTrace();
         } catch (IllegalArgumentException e) {
