@@ -6,6 +6,7 @@ import com.infoworks.lab.domain.entities.Rider;
 import com.infoworks.lab.rest.models.ItemCount;
 import com.infoworks.lab.webapp.WebApplicationTest;
 import com.infoworks.lab.webapp.config.BeanConfig;
+import com.infoworks.lab.webapp.config.TestJPAConfig;
 import org.junit.Assert;
 import org.junit.Before;
 import org.junit.Rule;
@@ -21,9 +22,9 @@ import org.springframework.test.context.junit4.SpringRunner;
 import java.util.List;
 
 @RunWith(SpringRunner.class)
-@SpringBootTest(classes = {WebApplicationTest.class, BeanConfig.class, RiderController.class})
+@SpringBootTest(classes = {WebApplicationTest.class, BeanConfig.class, RiderController.class, TestJPAConfig.class})
 @TestPropertySource(locations = {"classpath:h2-db.properties"})
-public class RiderControllerTest {
+public class RiderControllerIntegrationTest {
 
     @Value("${app.db.name}")
     private String dbName;

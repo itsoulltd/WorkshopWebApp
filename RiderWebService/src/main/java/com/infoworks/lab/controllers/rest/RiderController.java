@@ -1,10 +1,12 @@
 package com.infoworks.lab.controllers.rest;
 
+import com.fasterxml.jackson.core.JsonProcessingException;
+import com.fasterxml.jackson.databind.ObjectMapper;
 import com.infoworks.lab.domain.entities.Rider;
 import com.infoworks.lab.rest.models.ItemCount;
-import com.it.soul.lab.data.simple.SimpleDataSource;
+import com.infoworks.lab.services.iServices.iRiderService;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.beans.factory.annotation.Qualifier;
+import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import javax.validation.Valid;
@@ -15,52 +17,57 @@ import java.util.List;
 @RequestMapping("/rider")
 public class RiderController {
 
-    private SimpleDataSource<String, Rider> dataSource;
+    //private SimpleDataSource<String, Rider> dataSource;
+    private iRiderService service;
+    private ObjectMapper mapper;
 
     @Autowired
-    public RiderController(@Qualifier("riderInMemDatasource") SimpleDataSource<String, Rider> dataSource) {
-        this.dataSource = dataSource;
+    public RiderController(iRiderService service, ObjectMapper mapper) {
+        this.service = service;
+        this.mapper = mapper;
+    }
+
+    @GetMapping("/hello")
+    public ResponseEntity<String> getHello() throws JsonProcessingException {
+        ItemCount count = new ItemCount();
+        count.setCount(12l);
+        return ResponseEntity.ok(mapper.writeValueAsString(count));
     }
 
     @GetMapping("/rowCount")
     public ItemCount getRowCount(){
         ItemCount count = new ItemCount();
-        count.setCount(Integer.valueOf(dataSource.size()).longValue());
+        count.setCount(service.totalCount());
         return count;
     }
 
     @GetMapping
-    public List<Rider> query(@RequestParam("limit") Integer limit
-            , @RequestParam("offset") Integer offset){
+    public List<Rider> query(@RequestParam("limit") Integer size
+            , @RequestParam("offset") Integer page){
         //TODO: Test with RestExecutor
-        List<Rider> riders = Arrays.asList(dataSource.readSync(offset, limit));
+        List<Rider> riders = service.findAll(page, size);
         return riders;
     }
 
-    @PostMapping @SuppressWarnings("Duplicates")
-    public ItemCount insert(@Valid @RequestBody Rider rider){
+    @PostMapping
+    public Rider insert(@Valid @RequestBody Rider rider){
         //TODO: Test with RestExecutor
-        dataSource.put(rider.getName(), rider);
-        ItemCount count = new ItemCount();
-        count.setCount(Integer.valueOf(dataSource.size()).longValue());
-        return count;
+        Rider nRider = service.add(rider);
+        return nRider;
     }
 
-    @PutMapping @SuppressWarnings("Duplicates")
-    public ItemCount update(@Valid @RequestBody Rider rider){
+    @PutMapping
+    public Rider update(@Valid @RequestBody Rider rider){
         //TODO: Test with RestExecutor
-        Rider old = dataSource.replace(rider.getName(), rider);
-        ItemCount count = new ItemCount();
-        if (old != null)
-            count.setCount(Integer.valueOf(dataSource.size()).longValue());
-        return count;
+        Rider old = service.update(rider);
+        return old;
     }
 
     @DeleteMapping
-    public Boolean delete(@RequestParam("name") String name){
+    public Boolean delete(@RequestParam("userid") Integer userid){
         //TODO: Test with RestExecutor
-        Rider deleted = dataSource.remove(name);
-        return deleted != null;
+        boolean deleted = service.remove(userid);
+        return deleted;
     }
 
 }
