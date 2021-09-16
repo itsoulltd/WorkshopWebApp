@@ -53,7 +53,7 @@ services:
         app.db.port: 3306
         app.db.password: root@123
         app.db.mysql.url.query: ?autoReconnect=true&failOverReadOnly=false&maxReconnects=10
-        app.rider.host: localhost
+        app.rider.host: webapp
         app.rider.port: 8080
         app.rider.api: rider
       ports:

@@ -57,7 +57,7 @@ public class RiderRepositoryTest {
     @Test
     public void fetch() throws HttpInvocationException, IOException {
         ItemCount count = getRepository().rowCount();
-        int max = Integer.valueOf(count.getCount() + "");
+        int max = count.getCount().intValue();
         int limit = 5;
         int page = 0;
         int numOfPage = (max / limit) + 1;
