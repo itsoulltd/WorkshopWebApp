@@ -8,11 +8,10 @@ import com.infoworks.lab.components.crud.components.utils.EditorDisplayType;
 import com.infoworks.lab.components.db.source.JsqlDataSource;
 import com.infoworks.lab.components.db.source.SqlDataSource;
 import com.infoworks.lab.components.presenters.RiderEditor;
-import com.infoworks.lab.components.rest.RestExecutor;
 import com.infoworks.lab.components.rest.source.RestDataSource;
 import com.infoworks.lab.domain.entities.Gender;
 import com.infoworks.lab.domain.entities.Rider;
-import com.infoworks.lab.jsql.DataSourceKey;
+import com.infoworks.lab.domain.executor.RiderExecutor;
 import com.infoworks.lab.jsql.ExecutorType;
 import com.infoworks.lab.layouts.RootAppLayout;
 import com.infoworks.lab.layouts.RoutePath;
@@ -61,10 +60,8 @@ public class RidersView extends Composite<Div> {
             return source;
         }else if(executorType == ExecutorType.REST) {
             //Fetching Data From WebService:
-            GridDataSource source = JsqlDataSource.createDataSource(RestDataSource.class, executorType);
-            //Testing RestExecutor:
-            DataSourceKey sourceKey = DataSourceKey.createDataSourceKey("app.db");
-            ((RestDataSource) source).setExecutor(new RestExecutor(Rider.class, sourceKey));
+            JsqlDataSource source = JsqlDataSource.createDataSource(RestDataSource.class, executorType);
+            source.setExecutor(new RiderExecutor());
             return source;
         }else{
             //In-Memory DataSource:

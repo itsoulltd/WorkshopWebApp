@@ -1,5 +1,6 @@
 package com.infoworks.lab.domain.entities;
 
+import com.infoworks.lab.rest.models.Response;
 import com.it.soul.lab.sql.SQLExecutor;
 import com.it.soul.lab.sql.entity.Ignore;
 import com.it.soul.lab.sql.entity.PrimaryKey;
@@ -16,7 +17,7 @@ import java.util.Objects;
 
 @Entity(name = "Rider")
 @TableName(value = "Rider")
-public class Rider extends com.it.soul.lab.sql.entity.Entity {
+public class Rider extends Response {
 
 	@PrimaryKey(name="id", auto=true)
 	@Id @Column(length = 100)
