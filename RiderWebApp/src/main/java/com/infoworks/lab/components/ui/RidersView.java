@@ -39,7 +39,7 @@ public class RidersView extends Composite<Div> {
             getContent().removeAll();
         }
         //Create DataSource:
-        GridDataSource source = createDataSource(ExecutorType.SQL);
+        GridDataSource source = createDataSource(ExecutorType.REST);
 
         Configurator configurator = new Configurator(Rider.class)
                 .setDisplayType(EditorDisplayType.EMBEDDED)

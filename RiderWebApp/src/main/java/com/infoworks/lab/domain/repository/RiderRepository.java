@@ -2,13 +2,25 @@ package com.infoworks.lab.domain.repository;
 
 import com.infoworks.lab.client.jersey.HttpTemplate;
 import com.infoworks.lab.domain.entities.Rider;
+import com.infoworks.lab.exceptions.HttpInvocationException;
 import com.infoworks.lab.jsql.DataSourceKey;
-import com.infoworks.lab.rest.models.Message;
+import com.infoworks.lab.rest.models.*;
+import com.infoworks.lab.rest.template.Invocation;
 
-public class RiderRepository extends HttpTemplate<Rider, Message> {
+import java.io.IOException;
+import java.util.ArrayList;
+import java.util.List;
+import java.util.stream.Collectors;
+
+public class RiderRepository extends HttpTemplate<Response, Message> {
 
     public RiderRepository() {
         super(Rider.class, Message.class);
+    }
+
+    @Override
+    protected String schema() {
+        return "http://";
     }
 
     @Override
@@ -23,7 +35,7 @@ public class RiderRepository extends HttpTemplate<Rider, Message> {
 
     @Override
     protected String api() {
-        return System.getenv("app.rider.host");
+        return System.getenv("app.rider.api");
     }
 
     public static DataSourceKey getKeyContainer(){
@@ -41,6 +53,36 @@ public class RiderRepository extends HttpTemplate<Rider, Message> {
         container.set(DataSourceKey.Keys.NAME, name);
         //
         return container;
+    }
+
+    public ItemCount rowCount() throws IOException, HttpInvocationException {
+        javax.ws.rs.core.Response response = execute(null, Invocation.Method.GET, "rowCount");
+        ItemCount iCount = inflate(response, ItemCount.class);
+        return iCount;
+    }
+
+    public List<Rider> fetch(Integer page, Integer limit) throws HttpInvocationException {
+        Response items = get(null, new QueryParam("page", page.toString()), new QueryParam("limit", limit.toString()));
+        if (items instanceof ResponseList){
+            List<Rider> collection = ((ResponseList)items).getCollections();
+            return collection;
+        }
+        return new ArrayList<>();
+    }
+
+    public Rider insert(Rider rider) throws HttpInvocationException {
+        Rider response = (Rider) post(rider);
+        return response;
+    }
+
+    public Rider update(Rider rider) throws HttpInvocationException {
+        Rider response = (Rider) put(rider);
+        return response;
+    }
+
+    public boolean delete(Integer userId) throws HttpInvocationException {
+        boolean isDeleted = delete(null, new QueryParam("userid", userId.toString()));
+        return isDeleted;
     }
 
 }
