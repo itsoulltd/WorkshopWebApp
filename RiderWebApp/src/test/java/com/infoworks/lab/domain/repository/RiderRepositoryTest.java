@@ -76,7 +76,7 @@ public class RiderRepositoryTest {
         System.out.println("Created: " + created.getName());
         //Update:
         created.setName("Tictoc-up");
-        Rider update = getRepository().update(created);
+        Rider update = getRepository().update(created, created.getId());
         System.out.println("Updated: " + update.getName());
         //Delete:
         boolean isDeleted = getRepository().delete(update.getId());
