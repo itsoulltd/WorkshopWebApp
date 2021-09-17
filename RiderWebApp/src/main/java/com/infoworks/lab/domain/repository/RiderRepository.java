@@ -47,7 +47,7 @@ public class RiderRepository extends HttpTemplate<Response, Message> implements 
         return Rider.class;
     }
 
-    public ItemCount rowCount() throws RuntimeException {
+    public ItemCount rowCount() {
         try {
             javax.ws.rs.core.Response response = execute(null, Invocation.Method.GET, "rowCount");
             ItemCount iCount = inflate(response, ItemCount.class);
@@ -60,7 +60,7 @@ public class RiderRepository extends HttpTemplate<Response, Message> implements 
         return new ItemCount();
     }
 
-    public List<Rider> fetch(Integer page, Integer limit) throws RuntimeException {
+    public List<Rider> fetch(Integer page, Integer limit) {
         try {
             Response items = get(null, new QueryParam("page", page.toString()), new QueryParam("limit", limit.toString()));
             if (items instanceof ResponseList){
@@ -73,7 +73,7 @@ public class RiderRepository extends HttpTemplate<Response, Message> implements 
         return new ArrayList<>();
     }
 
-    public Rider insert(Rider rider) throws RuntimeException {
+    public Rider insert(Rider rider) {
         try {
             Rider response = (Rider) post(rider);
             return response;
@@ -84,7 +84,7 @@ public class RiderRepository extends HttpTemplate<Response, Message> implements 
     }
 
     @Override
-    public Rider update(Rider rider, Integer userid) throws RuntimeException {
+    public Rider update(Rider rider, Integer userid) {
         try {
             rider.setId(userid);
             Rider response = (Rider) put(rider);
@@ -95,7 +95,7 @@ public class RiderRepository extends HttpTemplate<Response, Message> implements 
         return null;
     }
 
-    public boolean delete(Integer userId) throws RuntimeException {
+    public boolean delete(Integer userId) {
         try {
             boolean isDeleted = delete(null, new QueryParam("userid", userId.toString()));
             return isDeleted;
