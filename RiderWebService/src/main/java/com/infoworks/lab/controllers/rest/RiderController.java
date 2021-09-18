@@ -10,6 +10,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import javax.validation.Valid;
+import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 
@@ -68,6 +69,17 @@ public class RiderController {
         //TODO: Test with RestExecutor
         boolean deleted = service.remove(userid);
         return deleted;
+    }
+
+    @GetMapping("/album/{userid}/{imgId}")
+    public String getAlbumItem(@PathVariable("userid") Integer userid
+            , @PathVariable("imgId") String imgId){
+        return "";
+    }
+
+    @GetMapping("/albums")
+    public List<String> getAlbums(@RequestParam("userid") Integer userid){
+        return new ArrayList<>();
     }
 
 }
