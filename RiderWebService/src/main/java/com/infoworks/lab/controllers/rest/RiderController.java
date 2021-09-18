@@ -95,8 +95,8 @@ public class RiderController {
         return encrypted;
     }
 
-    @GetMapping("/albums")
-    public List<String> getAlbums(@RequestParam("userid") Integer userid){
+    @GetMapping("/albums/{userid}")
+    public List<String> getAlbums(@PathVariable("userid") Integer userid){
         return Arrays.asList("sample/11812130661623646424584651857.jpg"
                 , "sample/18781305151623645845496247515.jpg"
                 , "sample/120979773116236458451800012549.jpg"
