@@ -2,14 +2,21 @@ package com.infoworks.lab.controllers.rest;
 
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
+import com.infoworks.lab.cryptor.definition.Cryptor;
+import com.infoworks.lab.cryptor.impl.AESCryptor;
 import com.infoworks.lab.domain.entities.Rider;
 import com.infoworks.lab.rest.models.ItemCount;
 import com.infoworks.lab.services.iServices.iRiderService;
+import com.infoworks.lab.services.impl.ResourceManager;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import javax.validation.Valid;
+import java.awt.image.BufferedImage;
+import java.io.File;
+import java.io.IOException;
+import java.io.InputStream;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
@@ -21,11 +28,13 @@ public class RiderController {
     //private SimpleDataSource<String, Rider> dataSource;
     private iRiderService service;
     private ObjectMapper mapper;
+    private ResourceManager resourceManager;
 
     @Autowired
-    public RiderController(iRiderService service, ObjectMapper mapper) {
+    public RiderController(iRiderService service, ObjectMapper mapper, ResourceManager resourceManager) {
         this.service = service;
         this.mapper = mapper;
+        this.resourceManager = resourceManager;
     }
 
     @GetMapping("/hello")
@@ -71,15 +80,28 @@ public class RiderController {
         return deleted;
     }
 
-    @GetMapping("/album/{userid}/{imgId}")
+    @GetMapping("/album/{userid}/{imgPath}")
     public String getAlbumItem(@PathVariable("userid") Integer userid
-            , @PathVariable("imgId") String imgId){
-        return "";
+            , @PathVariable("imgPath") String imgPath) throws IOException {
+        //
+        String secret = "my-country-man";
+        Cryptor cryptor = new AESCryptor();
+        File imfFile = new File(imgPath);
+        InputStream ios = resourceManager.createStream(imfFile);
+        //
+        BufferedImage bufferedImage = resourceManager.readAsImage(ios, BufferedImage.TYPE_INT_RGB);
+        String base64Image = resourceManager.readImageAsBase64(bufferedImage, ResourceManager.Format.JPEG);
+        String encrypted = cryptor.encrypt(secret, base64Image);
+        return encrypted;
     }
 
     @GetMapping("/albums")
     public List<String> getAlbums(@RequestParam("userid") Integer userid){
-        return new ArrayList<>();
+        return Arrays.asList("sample/11812130661623646424584651857.jpg"
+                , "sample/18781305151623645845496247515.jpg"
+                , "sample/120979773116236458451800012549.jpg"
+                , "sample/154657097816236464251755712367.jpg"
+                , "sample/158286147416236458461735865194.jpg");
     }
 
 }
