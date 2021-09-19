@@ -80,7 +80,7 @@ public class RiderController {
         return deleted;
     }
 
-    @GetMapping("/album/{userid}/{imgPath}")
+    @GetMapping("/photo/{userid}/{imgPath}")
     public String getAlbumItem(@PathVariable("userid") Integer userid
             , @PathVariable("imgPath") String imgPath) throws IOException {
         //
@@ -95,7 +95,7 @@ public class RiderController {
         return encrypted;
     }
 
-    @GetMapping("/albums/{userid}")
+    @GetMapping("/photos/{userid}")
     public List<String> getAlbums(@PathVariable("userid") Integer userid){
         return Arrays.asList("sample/11812130661623646424584651857.jpg"
                 , "sample/18781305151623645845496247515.jpg"
