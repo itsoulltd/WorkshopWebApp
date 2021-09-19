@@ -12,6 +12,9 @@ import java.util.List;
 import java.util.Map;
 
 public interface iResourceService {
+    static iResourceService create(){
+        return new ResourceService();
+    }
     InputStream createStream(File file);
     String readAsString(String filename);
     String readAsString(InputStream ios);

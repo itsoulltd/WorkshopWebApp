@@ -6,6 +6,7 @@ import com.infoworks.lab.cryptor.definition.Cryptor;
 import com.infoworks.lab.cryptor.impl.AESCryptor;
 import com.infoworks.lab.domain.entities.Rider;
 import com.infoworks.lab.rest.models.ItemCount;
+import com.infoworks.lab.services.iServices.iResourceService;
 import com.infoworks.lab.services.iServices.iRiderService;
 import com.infoworks.lab.services.impl.ResourceService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -27,10 +28,10 @@ public class RiderController {
     //private SimpleDataSource<String, Rider> dataSource;
     private iRiderService service;
     private ObjectMapper mapper;
-    private ResourceService resourceService;
+    private iResourceService resourceService;
 
     @Autowired
-    public RiderController(iRiderService service, ObjectMapper mapper, ResourceService resourceService) {
+    public RiderController(iRiderService service, ObjectMapper mapper, iResourceService resourceService) {
         this.service = service;
         this.mapper = mapper;
         this.resourceService = resourceService;

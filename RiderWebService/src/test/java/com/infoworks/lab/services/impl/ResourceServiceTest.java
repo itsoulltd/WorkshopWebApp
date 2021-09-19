@@ -2,6 +2,7 @@ package com.infoworks.lab.services.impl;
 
 import com.infoworks.lab.cryptor.definition.Cryptor;
 import com.infoworks.lab.cryptor.impl.AESCryptor;
+import com.infoworks.lab.services.iServices.iResourceService;
 import org.junit.Assert;
 import org.junit.Test;
 
@@ -17,7 +18,7 @@ public class ResourceServiceTest {
 
     @Test
     public void readJson(){
-        ResourceService manager = new ResourceService();
+        iResourceService manager = iResourceService.create();
         String json = manager.readAsString("data/rider-mock-data.json");
         System.out.println(json);
 
@@ -30,7 +31,7 @@ public class ResourceServiceTest {
         String secret = "my-country-man";
         Cryptor cryptor = new AESCryptor();
 
-        ResourceService manager = new ResourceService();
+        iResourceService manager = iResourceService.create();
         File imfFile = new File("data/11812130661623646424584651857.jpg");
         InputStream ios = manager.createStream(imfFile);
 
