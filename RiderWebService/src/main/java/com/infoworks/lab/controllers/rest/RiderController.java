@@ -19,12 +19,16 @@ import java.io.File;
 import java.io.IOException;
 import java.io.InputStream;
 import java.util.Arrays;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
+import java.util.logging.Logger;
 
 @RestController
 @RequestMapping("/rider")
 public class RiderController {
 
+    private static Logger LOG = Logger.getLogger(RiderController.class.getSimpleName());
     //private SimpleDataSource<String, Rider> dataSource;
     private iRiderService service;
     private ObjectMapper mapper;
@@ -84,6 +88,7 @@ public class RiderController {
     public String getAlbumItem(@PathVariable("userid") Integer userid
             , @RequestParam("imgPath") String imgPath) throws IOException {
         //
+        LOG.info(String.format("Received: %s: %s", userid, imgPath));
         String secret = "my-country-man";
         Cryptor cryptor = new AESCryptor();
         File imfFile = new File(imgPath);
@@ -92,7 +97,10 @@ public class RiderController {
         BufferedImage bufferedImage = resourceService.readAsImage(ios, BufferedImage.TYPE_INT_RGB);
         String base64Image = resourceService.readImageAsBase64(bufferedImage, ResourceService.Format.JPEG);
         String encrypted = cryptor.encrypt(secret, base64Image);
-        return encrypted;
+        //
+        Map data = new HashMap();
+        data.put("img", encrypted);
+        return mapper.writeValueAsString(data);
     }
 
     @GetMapping("/photos/{userid}")
