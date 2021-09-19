@@ -3,6 +3,7 @@ package com.infoworks.lab.services.impl;
 import com.fasterxml.jackson.core.type.TypeReference;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.infoworks.lab.rest.models.Message;
+import com.infoworks.lab.services.iServices.iResourceService;
 import org.springframework.stereotype.Service;
 
 import javax.imageio.ImageIO;
@@ -14,7 +15,7 @@ import java.util.*;
 import java.util.logging.Logger;
 
 @Service
-public class ResourceManager {
+public class ResourceService implements iResourceService {
 
     public enum Format{
         JPEG("jpeg"),
@@ -38,7 +39,7 @@ public class ResourceManager {
         }
     }
 
-    private static Logger LOG = Logger.getLogger(ResourceManager.class.getSimpleName());
+    private static Logger LOG = Logger.getLogger(ResourceService.class.getSimpleName());
 
     public InputStream createStream(File file){
         ClassLoader loader = getClass().getClassLoader();

@@ -7,7 +7,7 @@ import com.infoworks.lab.cryptor.impl.AESCryptor;
 import com.infoworks.lab.domain.entities.Rider;
 import com.infoworks.lab.rest.models.ItemCount;
 import com.infoworks.lab.services.iServices.iRiderService;
-import com.infoworks.lab.services.impl.ResourceManager;
+import com.infoworks.lab.services.impl.ResourceService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -17,7 +17,6 @@ import java.awt.image.BufferedImage;
 import java.io.File;
 import java.io.IOException;
 import java.io.InputStream;
-import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 
@@ -28,13 +27,13 @@ public class RiderController {
     //private SimpleDataSource<String, Rider> dataSource;
     private iRiderService service;
     private ObjectMapper mapper;
-    private ResourceManager resourceManager;
+    private ResourceService resourceService;
 
     @Autowired
-    public RiderController(iRiderService service, ObjectMapper mapper, ResourceManager resourceManager) {
+    public RiderController(iRiderService service, ObjectMapper mapper, ResourceService resourceService) {
         this.service = service;
         this.mapper = mapper;
-        this.resourceManager = resourceManager;
+        this.resourceService = resourceService;
     }
 
     @GetMapping("/hello")
@@ -87,10 +86,10 @@ public class RiderController {
         String secret = "my-country-man";
         Cryptor cryptor = new AESCryptor();
         File imfFile = new File(imgPath);
-        InputStream ios = resourceManager.createStream(imfFile);
+        InputStream ios = resourceService.createStream(imfFile);
         //
-        BufferedImage bufferedImage = resourceManager.readAsImage(ios, BufferedImage.TYPE_INT_RGB);
-        String base64Image = resourceManager.readImageAsBase64(bufferedImage, ResourceManager.Format.JPEG);
+        BufferedImage bufferedImage = resourceService.readAsImage(ios, BufferedImage.TYPE_INT_RGB);
+        String base64Image = resourceService.readImageAsBase64(bufferedImage, ResourceService.Format.JPEG);
         String encrypted = cryptor.encrypt(secret, base64Image);
         return encrypted;
     }
