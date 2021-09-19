@@ -80,9 +80,9 @@ public class RiderController {
         return deleted;
     }
 
-    @GetMapping("/photo/{userid}/{imgPath}")
+    @GetMapping("/photo/{userid}")
     public String getAlbumItem(@PathVariable("userid") Integer userid
-            , @PathVariable("imgPath") String imgPath) throws IOException {
+            , @RequestParam("imgPath") String imgPath) throws IOException {
         //
         String secret = "my-country-man";
         Cryptor cryptor = new AESCryptor();
