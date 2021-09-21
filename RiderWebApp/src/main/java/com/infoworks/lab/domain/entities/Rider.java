@@ -37,8 +37,9 @@ public class Rider extends Response {
 	@NotNull(message = "DOB Must Not Null") @Past(message = "Date Of Birth Must Be Greater Then Now")
 	private Date dob = new java.sql.Date(new Date().getTime());
 
-	//@Type(type = "org.hibernate.type.NumericBooleanType")
 	private boolean active;
+
+	private String email;
 
 	@Ignore
 	private static int _autoIncrement = -1;
@@ -106,6 +107,14 @@ public class Rider extends Response {
 
 	public void setSex(String sex) {
 		this.sex = sex;
+	}
+
+	public String getEmail() {
+		return email;
+	}
+
+	public void setEmail(String email) {
+		this.email = email;
 	}
 
 	@Override

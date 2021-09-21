@@ -40,6 +40,8 @@ public class Rider extends com.it.soul.lab.sql.entity.Entity {
 
 	private boolean active;
 
+	private String email;
+
 	@Ignore
 	private static int _autoIncrement = -1;
 
@@ -108,7 +110,15 @@ public class Rider extends com.it.soul.lab.sql.entity.Entity {
         this.sex = sex;
     }
 
-    @Override
+	public String getEmail() {
+		return email;
+	}
+
+	public void setEmail(String email) {
+		this.email = email;
+	}
+
+	@Override
 	public boolean equals(Object o) {
 		if (this == o) return true;
 		if (o == null || getClass() != o.getClass()) return false;
