@@ -2,14 +2,14 @@ package com.infoworks.lab.controllers.rest;
 
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
-import com.infoworks.lab.cryptor.definition.Cryptor;
-import com.infoworks.lab.cryptor.impl.AESCryptor;
 import com.infoworks.lab.domain.entities.Rider;
 import com.infoworks.lab.rest.models.ItemCount;
+import com.infoworks.lab.rest.models.Response;
 import com.infoworks.lab.services.iServices.iResourceService;
 import com.infoworks.lab.services.iServices.iRiderService;
 import com.infoworks.lab.services.impl.ResourceService;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
@@ -29,7 +29,6 @@ import java.util.logging.Logger;
 public class RiderController {
 
     private static Logger LOG = Logger.getLogger(RiderController.class.getSimpleName());
-    //private SimpleDataSource<String, Rider> dataSource;
     private iRiderService service;
     private ObjectMapper mapper;
     private iResourceService resourceService;
@@ -89,14 +88,12 @@ public class RiderController {
             , @RequestParam("imgPath") String imgPath) throws IOException {
         //
         LOG.info(String.format("Received: %s: %s", userid, imgPath));
-        String secret = "my-country-man";
-        Cryptor cryptor = new AESCryptor();
         File imfFile = new File(imgPath);
         InputStream ios = resourceService.createStream(imfFile);
         //
         BufferedImage bufferedImage = resourceService.readAsImage(ios, BufferedImage.TYPE_INT_RGB);
         String base64Image = resourceService.readImageAsBase64(bufferedImage, ResourceService.Format.JPEG);
-        String encrypted = cryptor.encrypt(secret, base64Image);
+        String encrypted = service.encrypt("defaultKey", base64Image);
         //
         Map data = new HashMap();
         data.put("img", encrypted);
@@ -110,6 +107,17 @@ public class RiderController {
                 , "sample/120979773116236458451800012549.jpg"
                 , "sample/154657097816236464251755712367.jpg"
                 , "sample/158286147416236458461735865194.jpg");
+    }
+
+    @PostMapping("/save/secret/{key}/{value}")
+    public String saveSecret(@PathVariable("key") String key
+                , @PathVariable("value") String value) {
+        //
+        Response response = new Response()
+                .setStatus(HttpStatus.OK.value())
+                .setMessage("Successfully Saved InMemory! on next run data will not recovered.");
+        service.saveSecret(key, value);
+        return response.toString();
     }
 
 }

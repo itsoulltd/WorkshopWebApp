@@ -130,7 +130,7 @@
         <dependency>
             <groupId>com.github.itsoulltd.WebComponentKit</groupId>
             <artifactId>jjwt-web-token</artifactId>
-            <version>v1.11.5-RELEASE</version>
+            <version>v1.11.6-RELEASE</version>
         </dependency>
         <!-- -->
         <!-- https://mvnrepository.com/artifact/io.springfox/springfox-swagger2 -->
