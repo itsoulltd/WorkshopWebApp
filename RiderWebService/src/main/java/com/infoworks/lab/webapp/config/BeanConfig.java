@@ -41,7 +41,7 @@ public class BeanConfig {
 
     @Bean
     Cryptor getCryptor(){
-        return new AESCryptor(HashKey.SHA_256, Transformation.AES_ECB_PKCS5Padding, CryptoAlgorithm.AES);
+        return new AESCryptor(HashKey.SHA_1, Transformation.AES_ECB_PKCS5Padding, CryptoAlgorithm.AES);
     }
 
 }
