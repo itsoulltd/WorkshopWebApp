@@ -12,7 +12,4 @@ public interface iRiderService {
     Rider findByUserID(Integer userid);
     List<Rider> findAllByUserID(List<Integer> userid);
     List<Rider> findAll(Integer page, Integer size);
-
-    String encrypt(String secretKey, String base64Image);
-    void saveSecret(String key, String value);
 }
