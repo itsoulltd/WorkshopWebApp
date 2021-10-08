@@ -20,14 +20,14 @@ public class EncryptedDataService implements iEncryptedDataService {
 
     @Override
     public String encrypt(String alias, String source) {
-        String secret = retrieveSecret(alias);
+        String secret = dataSource.read(alias);
         String encrypted = cryptor.encrypt(secret, source);
         return encrypted;
     }
 
     @Override
     public String decrypt(String alias, String source) {
-        String secret = retrieveSecret(alias);
+        String secret = dataSource.read(alias);
         String decrypted = cryptor.decrypt(secret, source);
         return decrypted;
     }
@@ -37,8 +37,4 @@ public class EncryptedDataService implements iEncryptedDataService {
         dataSource.put(alias, secret);
     }
 
-    @Override
-    public String retrieveSecret(String alias) {
-        return dataSource.read(alias);
-    }
 }

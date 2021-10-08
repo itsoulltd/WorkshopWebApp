@@ -21,32 +21,39 @@ public class EncryptedDataExchangeController {
     }
 
     @PostMapping("/save/{alias}/{secret}")
-    public String saveSecret(@PathVariable("alias") String alias
+    public Response saveSecret(@PathVariable("alias") String alias
             , @PathVariable("secret") String secret) {
         //
         Response response = new Response()
                 .setStatus(HttpStatus.OK.value())
                 .setMessage("Successfully Saved InMemory! on next run data will not recovered.");
         dataService.saveSecret(alias, secret);
-        return response.toString();
+        return response;
     }
 
-    @GetMapping("/getString/{alias}")
-    public String encryptString(@PathVariable("alias") String alias){
-        String secret = dataService.retrieveSecret(alias);
-        return "";
+    @GetMapping("/{alias}")
+    public Message encryptString(@PathVariable("alias") String alias){
+        //
+        return new Response()
+                .setStatus(HttpStatus.OK.value())
+                .setMessage("hi there!")
+                .setPayload(dataService.encrypt(alias, "My return message from encrypted service call."));
     }
 
-    @PostMapping("/postMessage/{alias}")
-    public ResponseEntity<Response> postResponse(@PathVariable("alias") String alias
+    @PostMapping("/message/{alias}")
+    public ResponseEntity<Message> postResponse(@PathVariable("alias") String alias
                                     , @RequestBody Message msg){
         //
-        String secret = dataService.retrieveSecret(alias);
         String encryptedPayload = msg.getPayload();
+        LOG.info("Encrypted Received: " + encryptedPayload);
+        if (encryptedPayload != null && !encryptedPayload.isEmpty()) {
+            String plainText = dataService.decrypt(alias, encryptedPayload);
+            LOG.info("Decrypted Msg: " + plainText);
+        }
         //
-        Response response = new Response().setMessage("")
+        Response response = new Response().setMessage("Successfully Decrypted")
                 .setStatus(HttpStatus.OK.value());
-        //
+        response.setPayload(dataService.encrypt(alias, "My return message from plain-message call."));
         return ResponseEntity.ok(response);
     }
 
