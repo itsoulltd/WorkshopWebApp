@@ -3,9 +3,9 @@ package com.infoworks.lab.webapp.config;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.infoworks.lab.cryptor.definition.Cryptor;
 import com.infoworks.lab.cryptor.impl.AESCryptor;
-import com.infoworks.lab.cryptor.util.AESMode;
-import com.infoworks.lab.cryptor.util.SecretKeyAlgo;
-import com.infoworks.lab.cryptor.util.ShaKey;
+import com.infoworks.lab.cryptor.util.CryptoAlgorithm;
+import com.infoworks.lab.cryptor.util.HashKey;
+import com.infoworks.lab.cryptor.util.Transformation;
 import com.infoworks.lab.domain.entities.Rider;
 import com.infoworks.lab.rest.models.Message;
 import com.it.soul.lab.data.simple.SimpleDataSource;
@@ -41,7 +41,7 @@ public class BeanConfig {
 
     @Bean
     Cryptor getCryptor(){
-        return new AESCryptor(ShaKey.Sha_256, AESMode.AES_ECB_PKCS5Padding, SecretKeyAlgo.AES);
+        return new AESCryptor(HashKey.SHA_256, Transformation.AES_ECB_PKCS5Padding, CryptoAlgorithm.AES);
     }
 
 }

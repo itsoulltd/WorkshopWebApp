@@ -14,16 +14,22 @@ public class EncryptedDataService implements iEncryptedDataService {
 
     public EncryptedDataService( Cryptor cryptor
             , @Qualifier("secretInMemDatasource") SimpleDataSource<String, String> dataSource) {
-        //
         this.dataSource = dataSource;
         this.cryptor = cryptor;
     }
 
     @Override
-    public String encrypt(String secretKey, String base64Image) {
-        String secret = dataSource.read(secretKey);
-        String encrypted = cryptor.encrypt(secret, base64Image);
+    public String encrypt(String alias, String source) {
+        String secret = retrieveSecret(alias);
+        String encrypted = cryptor.encrypt(secret, source);
         return encrypted;
+    }
+
+    @Override
+    public String decrypt(String alias, String source) {
+        String secret = retrieveSecret(alias);
+        String decrypted = cryptor.decrypt(secret, source);
+        return decrypted;
     }
 
     @Override
