@@ -9,6 +9,7 @@ import com.infoworks.lab.services.iServices.iResourceService;
 import com.infoworks.lab.services.iServices.iRiderService;
 import com.infoworks.lab.services.impl.ResourceService;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
@@ -37,7 +38,7 @@ public class RiderController {
     public RiderController(iRiderService service
             , ObjectMapper mapper
             , iResourceService resourceService
-            , iEncryptedDataService dataService) {
+            , @Qualifier("ImageDataService") iEncryptedDataService dataService) {
         this.service = service;
         this.mapper = mapper;
         this.resourceService = resourceService;

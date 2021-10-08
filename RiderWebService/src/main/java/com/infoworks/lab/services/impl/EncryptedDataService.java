@@ -3,17 +3,14 @@ package com.infoworks.lab.services.impl;
 import com.infoworks.lab.cryptor.definition.Cryptor;
 import com.infoworks.lab.services.iServices.iEncryptedDataService;
 import com.it.soul.lab.data.simple.SimpleDataSource;
-import org.springframework.beans.factory.annotation.Qualifier;
-import org.springframework.stereotype.Service;
 
-@Service
 public class EncryptedDataService implements iEncryptedDataService {
 
     private SimpleDataSource<String, String> dataSource;
     private Cryptor cryptor;
 
     public EncryptedDataService( Cryptor cryptor
-            , @Qualifier("secretInMemDatasource") SimpleDataSource<String, String> dataSource) {
+            , SimpleDataSource<String, String> dataSource) {
         this.dataSource = dataSource;
         this.cryptor = cryptor;
     }

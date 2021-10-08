@@ -8,7 +8,10 @@ import com.infoworks.lab.cryptor.util.HashKey;
 import com.infoworks.lab.cryptor.util.Transformation;
 import com.infoworks.lab.domain.entities.Rider;
 import com.infoworks.lab.rest.models.Message;
+import com.infoworks.lab.services.iServices.iEncryptedDataService;
+import com.infoworks.lab.services.impl.EncryptedDataService;
 import com.it.soul.lab.data.simple.SimpleDataSource;
+import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 
@@ -39,9 +42,18 @@ public class BeanConfig {
         return Message.getJsonSerializer();
     }
 
-    @Bean
-    Cryptor getCryptor(){
-        return new AESCryptor(HashKey.SHA_1, Transformation.AES_ECB_PKCS5Padding, CryptoAlgorithm.AES);
+    @Bean("ImageDataService")
+    iEncryptedDataService getImageDataService(@Qualifier("secretInMemDatasource") SimpleDataSource dataSource){
+        return new EncryptedDataService(
+                new AESCryptor(HashKey.SHA_1, Transformation.AES_ECB_PKCS5Padding, CryptoAlgorithm.AES)
+                , dataSource);
+    }
+
+    @Bean("MessageDataService")
+    iEncryptedDataService getMessageDataService(@Qualifier("secretInMemDatasource") SimpleDataSource dataSource){
+        return new EncryptedDataService(
+                new AESCryptor(HashKey.SHA_256, Transformation.AES_ECB_PKCS5Padding, CryptoAlgorithm.AES)
+                , dataSource);
     }
 
 }

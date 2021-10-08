@@ -3,6 +3,7 @@ package com.infoworks.lab.controllers.rest;
 import com.infoworks.lab.rest.models.Message;
 import com.infoworks.lab.rest.models.Response;
 import com.infoworks.lab.services.iServices.iEncryptedDataService;
+import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -16,7 +17,7 @@ public class EncryptedDataExchangeController {
     private static Logger LOG = Logger.getLogger(EncryptedDataExchangeController.class.getSimpleName());
     private iEncryptedDataService dataService;
 
-    public EncryptedDataExchangeController(iEncryptedDataService dataService) {
+    public EncryptedDataExchangeController(@Qualifier("MessageDataService") iEncryptedDataService dataService) {
         this.dataService = dataService;
     }
 
