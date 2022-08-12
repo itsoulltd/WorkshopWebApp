@@ -1,6 +1,7 @@
 package com.infoworks.lab.controllers.rest;
 
 import com.infoworks.lab.rest.models.ItemCount;
+import com.infoworks.lab.rest.models.SearchQuery;
 import com.infoworks.lab.services.iServices.iResourceService;
 import com.infoworks.lab.services.impl.LocalStorageService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -14,11 +15,13 @@ import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
-import java.io.File;
-import java.io.IOException;
-import java.io.InputStream;
+import javax.imageio.ImageIO;
+import java.awt.image.BufferedImage;
+import java.io.*;
 import java.util.Arrays;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 import java.util.logging.Logger;
 
 @RestController
@@ -58,6 +61,38 @@ public class FileUploadController {
         storageService.put(content.getOriginalFilename(), content.getInputStream());
         //storageService.save(false);
         return ResponseEntity.ok("Content Received: " + content.getOriginalFilename());
+    }
+
+    @PostMapping("/upload/image/base64")
+    public ResponseEntity<Map> uploadStringContent(@RequestBody SearchQuery content) throws IOException {
+        //
+        Map<String,String> document = new HashMap<>();
+        document.put("name", content.get("name", String.class));
+        document.put("contentType", content.get("contentType", String.class));
+        document.put("description", content.get("description", String.class));
+        String base64Str = content.get("content", String.class);
+        if (base64Str != null && !base64Str.isEmpty()) {
+            document.put("content", base64Str);
+            //Save into temp-store:
+            String imageName = document.get("name");
+            String formatName = imageName.substring(imageName.lastIndexOf(".") + 1);
+            BufferedImage img = resourceService.readImageFromBase64(base64Str);
+            ByteArrayOutputStream os = new ByteArrayOutputStream();
+            ImageIO.write(img, formatName, os);
+            InputStream is = new ByteArrayInputStream(os.toByteArray());
+            //Store-InMemory First:
+            storageService.put(document.get("name"), is);
+            //storageService.save(false);
+            //
+            Map mp = new HashMap();
+            mp.put("uuid", document.get("name"));
+            mp.put("name", document.get("name"));
+            mp.put("timestamp", System.currentTimeMillis());
+            return ResponseEntity.ok(mp);
+        }
+        Map<String, String> data = new HashMap<>();
+        data.put("error", "content is empty or null.");
+        return ResponseEntity.badRequest().build();
     }
 
     @GetMapping("/download")
