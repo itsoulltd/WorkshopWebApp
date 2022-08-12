@@ -66,8 +66,35 @@ public class FileUploadController {
         return ResponseEntity.ok("Content Received: " + content.getOriginalFilename());
     }
 
+    @GetMapping("/download")
+    public ResponseEntity<Resource> downloadContent(@RequestParam("fileName") String fileName) throws IOException {
+        /*String fileName = "11812130661623646424584651857.jpg";
+        File file = new File("sample/" + fileName);
+        LOG.info("File path: " + file.getAbsolutePath());
+        //
+        InputStream ios = resourceService.createStream(file);
+        int contentLength = file.length();
+        */
+        InputStream ios = storageService.read(fileName);
+        int contentLength = ios.available();
+        ByteArrayResource resource = new ByteArrayResource(resourceService.readAsBytes(ios));
+        ios.close();
+        //
+        HttpHeaders header = new HttpHeaders();
+        header.add(HttpHeaders.CONTENT_DISPOSITION, String.format("attachment; filename=%s", fileName));
+        header.add("Cache-Control", "no-cache, no-store, must-revalidate");
+        header.add("Pragma", "no-cache");
+        header.add("Expires", "0");
+        //
+        return ResponseEntity.ok()
+                .headers(header)
+                .contentLength(contentLength)
+                .contentType(MediaType.APPLICATION_OCTET_STREAM)
+                .body(resource);
+    }
+
     @PostMapping("/upload/image/base64")
-    public ResponseEntity<Map> uploadStringContent(@RequestBody SearchQuery content) throws IOException {
+    public ResponseEntity<Map> uploadBase64Image(@RequestBody SearchQuery content) throws IOException {
         //
         Map<String,String> document = new HashMap<>();
         document.put("name", content.get("name", String.class));
@@ -98,33 +125,6 @@ public class FileUploadController {
         Map<String, String> data = new HashMap<>();
         data.put("error", "content is empty or null.");
         return ResponseEntity.badRequest().build();
-    }
-
-    @GetMapping("/download")
-    public ResponseEntity<Resource> downloadContent(@RequestParam("fileName") String fileName) throws IOException {
-        /*String fileName = "11812130661623646424584651857.jpg";
-        File file = new File("sample/" + fileName);
-        LOG.info("File path: " + file.getAbsolutePath());
-        //
-        InputStream ios = resourceService.createStream(file);
-        int contentLength = file.length();
-        */
-        InputStream ios = storageService.read(fileName);
-        int contentLength = ios.available();
-        ByteArrayResource resource = new ByteArrayResource(resourceService.readAsBytes(ios));
-        ios.close();
-        //
-        HttpHeaders header = new HttpHeaders();
-        header.add(HttpHeaders.CONTENT_DISPOSITION, String.format("attachment; filename=%s", fileName));
-        header.add("Cache-Control", "no-cache, no-store, must-revalidate");
-        header.add("Pragma", "no-cache");
-        header.add("Expires", "0");
-        //
-        return ResponseEntity.ok()
-                .headers(header)
-                .contentLength(contentLength)
-                .contentType(MediaType.APPLICATION_OCTET_STREAM)
-                .body(resource);
     }
 
     @GetMapping("/download/image/base64")
