@@ -25,6 +25,8 @@ import java.util.List;
 import java.util.Map;
 import java.util.logging.Logger;
 
+import static com.infoworks.lab.services.impl.ResourceService.*;
+
 @RestController
 @RequestMapping("/files")
 public class FileUploadController {
@@ -132,7 +134,10 @@ public class FileUploadController {
         InputStream ios = storageService.read(fileName);
         int contentLength = ios.available();
         BufferedImage bufferedImage = resourceService.readAsImage(ios, BufferedImage.TYPE_INT_RGB);
-        String base64Image = resourceService.readImageAsBase64(bufferedImage, ResourceService.Format.JPEG);
+        //
+        String formatName = fileName.substring(fileName.lastIndexOf(".") + 1);
+        Format format = (formatName.equalsIgnoreCase(Format.JPEG.name())) ? Format.JPEG : Format.PNG;
+        String base64Image = resourceService.readImageAsBase64(bufferedImage, format);
         ios.close();
         //
         Map data = new HashMap();
