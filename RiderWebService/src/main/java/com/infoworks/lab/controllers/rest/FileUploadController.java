@@ -4,6 +4,7 @@ import com.infoworks.lab.rest.models.ItemCount;
 import com.infoworks.lab.rest.models.SearchQuery;
 import com.infoworks.lab.services.iServices.iResourceService;
 import com.infoworks.lab.services.impl.LocalStorageService;
+import com.infoworks.lab.services.impl.ResourceService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.core.io.ByteArrayResource;
@@ -83,6 +84,8 @@ public class FileUploadController {
             //Store-InMemory First:
             storageService.put(document.get("name"), is);
             //storageService.save(false);
+            is.close();
+            os.close();
             //
             Map mp = new HashMap();
             mp.put("uuid", document.get("name"));
@@ -120,6 +123,23 @@ public class FileUploadController {
                 .contentLength(contentLength)
                 .contentType(MediaType.APPLICATION_OCTET_STREAM)
                 .body(resource);
+    }
+
+    @GetMapping("/download/image/base64")
+    public ResponseEntity<Map> downloadBase64Image(@RequestParam("fileName") String fileName)
+            throws IOException {
+        //
+        InputStream ios = storageService.read(fileName);
+        int contentLength = ios.available();
+        BufferedImage bufferedImage = resourceService.readAsImage(ios, BufferedImage.TYPE_INT_RGB);
+        String base64Image = resourceService.readImageAsBase64(bufferedImage, ResourceService.Format.JPEG);
+        ios.close();
+        //
+        Map data = new HashMap();
+        data.put("content", base64Image);
+        data.put("name", fileName);
+        data.put("length", contentLength);
+        return ResponseEntity.ok(data);
     }
 
 }
